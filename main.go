@@ -13,7 +13,7 @@ import (
 
 func main() {
 	var err error
-	database.DBCon, err = sql.Open("sqlite3", "./foo.db")
+	database.DBCon, err = sql.Open("sqlite3", "./sql.db")
 	if err != nil {
 		log.Fatal(err)
 	}
