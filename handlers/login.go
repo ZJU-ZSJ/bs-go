@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"bs-go/database"
+	"bsgo/database"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"

@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"bs-go/database"
+	"bsgo/database"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
@@ -10,8 +10,10 @@ import (
 )
 
 func BookAdd(c *gin.Context) {
-	uid, _ := strconv.Atoi(c.PostForm("uid"))
-	token := c.PostForm("token")
+	i, _ := c.Request.Cookie("uid")
+	toke, _ := c.Request.Cookie("token")
+	uid, _ := strconv.Atoi(i.Value)
+	token := toke.Value
 	if !didlogin(uid, token) {
 		c.JSON(http.StatusOK, gin.H{
 			"code": -10,

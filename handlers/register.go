@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"bs-go/database"
+	"bsgo/database"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
@@ -10,10 +10,11 @@ import (
 func RegisterPage(c *gin.Context) {
 	username := c.PostForm("username")
 	password := c.PostForm("password")
+	email := c.PostForm("email")
 
-	log.Println(username, password)
+	log.Println(username, password, email)
 
-	if len(username) < 4 || len(password) < 6 {
+	if len(username) < 6 || len(username) > 20 || len(password) < 6 || len(password) > 20 || len(email) < 3 {
 		c.JSON(http.StatusOK, gin.H{
 			"code": -1,
 			"msg":  "格式错误",
@@ -23,13 +24,13 @@ func RegisterPage(c *gin.Context) {
 
 	returncode := 0
 
-	stmt, err := database.DBCon.Prepare("INSERT INTO User(username, password) values(?,?)")
+	stmt, err := database.DBCon.Prepare("INSERT INTO User(username, password,email,name,face) values(?,?,?,?,?)")
 	if err != nil {
 		returncode = -1
 		log.Printf("%q", err)
 	}
 	if returncode == 0 {
-		_, err = stmt.Exec(username, password)
+		_, err = stmt.Exec(username, password, email, "", "")
 		if err != nil {
 			returncode = -1
 			log.Printf("%q", err)

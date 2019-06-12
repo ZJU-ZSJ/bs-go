@@ -1,8 +1,8 @@
 package main
 
 import (
-	"bs-go/database"
-	"bs-go/router"
+	"bsgo/database"
+	"bsgo/router"
 	"database/sql"
 	_ "database/sql"
 	_ "fmt"
@@ -19,8 +19,17 @@ func main() {
 	}
 	/*
 		书状态：
-			1：正常售卖
-			2：已被买走
+			0：正常售卖
+			1：已被买走
+
+		订单状态:
+			0: 已下单
+			1：已发货或选择线下交易
+			2：已完成
+
+		订单分类：
+			0:邮寄
+			1:线下交易
 	*/
 	//创建表
 	sql_table := `
@@ -28,9 +37,10 @@ func main() {
         uid INTEGER PRIMARY KEY AUTOINCREMENT,
         username VARCHAR(64) NOT NULL UNIQUE,
         password VARCHAR(64) NOT NULL,
-        email	 VARCHAR(64) NULL,
+        email	 VARCHAR(64) NOT NULL UNIQUE,
         name 	 VARCHAR(64) NULL,
         token	 VARCHAR(64) NULL,
+        face	VARCHAR(64) NULL,
         time 	 TIMESTAMP   NULL
     );
     CREATE TABLE IF NOT EXISTS Book(
@@ -45,6 +55,19 @@ func main() {
         uid		INTEGER NOT NULL,
         state	INTEGER NOT NULL,
         time	TIME 	NOT NULL
+    );
+    CREATE TABLE IF NOT EXISTS Ord(
+        orderid INTEGER PRIMARY KEY AUTOINCREMENT,
+        bookid  INTEGER NOT NULL,
+        bookname VARCHAR NOT NULL,
+        ordertime TIMESTAMP NOT NULL,
+        buyerid INTEGER	NOT NULL,
+        salerid INTEGER NOT NULL,
+        ordertype INTEGER NOT NULL,
+        address VARCHAR(64)  NULL,
+        state	INTEGER NOT NULL,
+        bcom	INTEGER NOT NULL,
+        scom	INTEGER NOT NULL
     );
     `
 	_, err = database.DBCon.Exec(sql_table)

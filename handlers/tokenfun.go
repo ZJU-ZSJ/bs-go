@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"bs-go/database"
+	"bsgo/database"
 	"crypto/md5"
 	"encoding/hex"
 	"io"
@@ -48,6 +48,7 @@ func tokeninvalid(username string) bool {
 }
 
 func didlogin(uid int, token string) bool {
+	log.Printf("%d,%s", uid, token)
 	if uid == 0 || len(token) == 0 {
 		return false
 	}

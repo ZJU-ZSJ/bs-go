@@ -1,7 +1,7 @@
 package handlers
 
 import (
-	"bs-go/database"
+	"bsgo/database"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
@@ -16,8 +16,10 @@ func Bookshow(c *gin.Context) {
 	var content string
 	var pic string
 	var bookurl string
+	var state int
+	var uid int
 	returncode := 0
-	err := database.DBCon.QueryRow("SELECT bookname,priceori,pricenow,category,content,pic,bookurl FROM Book WHERE bookid=?", id).Scan(&bookname, &priceori, &pricenow, &category, &content, &pic, &bookurl)
+	err := database.DBCon.QueryRow("SELECT uid,state,bookname,priceori,pricenow,category,content,pic,bookurl FROM Book WHERE bookid=?", id).Scan(&uid, &state, &bookname, &priceori, &pricenow, &category, &content, &pic, &bookurl)
 	if err != nil {
 		returncode = -1
 		log.Printf("%q", err)
@@ -26,6 +28,8 @@ func Bookshow(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"code": returncode,
 			"data": gin.H{
+				"uid":      uid,
+				"state":    state,
 				"bookname": bookname,
 				"priceori": priceori,
 				"pricenow": pricenow,
