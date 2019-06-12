@@ -9,7 +9,7 @@ import (
 )
 
 func Scom(c *gin.Context) {
-	orderid := c.PostForm("orderid")
+	orderid := c.Request.PostFormValue("orderid")
 	i, _ := c.Request.Cookie("uid")
 	toke, _ := c.Request.Cookie("token")
 	uid, _ := strconv.Atoi(i.Value)

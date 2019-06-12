@@ -8,9 +8,9 @@ import (
 )
 
 func RegisterPage(c *gin.Context) {
-	username := c.PostForm("username")
-	password := c.PostForm("password")
-	email := c.PostForm("email")
+	username := c.Request.PostFormValue("username")
+	password := c.Request.PostFormValue("password")
+	email := c.Request.PostFormValue("email")
 
 	log.Println(username, password, email)
 

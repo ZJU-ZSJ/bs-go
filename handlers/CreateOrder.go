@@ -10,8 +10,10 @@ import (
 )
 
 func CreateOrder(c *gin.Context) {
-	uid, _ := strconv.Atoi(c.PostForm("uid"))
-	token := c.PostForm("token")
+	i, _ := c.Request.Cookie("uid")
+	toke, _ := c.Request.Cookie("token")
+	uid, _ := strconv.Atoi(i.Value)
+	token := toke.Value
 	if !didlogin(uid, token) {
 		c.JSON(http.StatusOK, gin.H{
 			"code": -10,
@@ -20,9 +22,9 @@ func CreateOrder(c *gin.Context) {
 		return
 	}
 	var salerid int
-	bookid, _ := strconv.Atoi(c.PostForm("bookid"))
-	ordertype, _ := strconv.Atoi(c.PostForm("ordertype"))
-	address := c.PostForm("address")
+	bookid, _ := strconv.Atoi(c.Request.PostFormValue("bookid"))
+	ordertype, _ := strconv.Atoi(c.Request.PostFormValue("ordertype"))
+	address := c.Request.PostFormValue("address")
 
 	if bookid <= 0 || ordertype < 0 || ordertype > 1 {
 		log.Printf("%d,%d,%s", bookid, ordertype, address)

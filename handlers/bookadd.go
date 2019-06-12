@@ -21,13 +21,14 @@ func BookAdd(c *gin.Context) {
 		})
 		return
 	}
-	bookname := c.PostForm("bookname")
-	priceori := c.PostForm("priceori")
-	pricenow := c.PostForm("pricenow")
-	category := c.PostForm("category")
-	content := c.PostForm("content")
-	pic := c.PostForm("pic")
-	bookurl := c.PostForm("bookurl")
+	bookname := c.Request.PostFormValue("bookname")
+	priceori := c.Request.PostFormValue("priceori")
+	pricenow := c.Request.PostFormValue("pricenow")
+	category := c.Request.PostFormValue("category")
+	content := c.Request.PostFormValue("content")
+	pic := c.Request.PostFormValue("pic")
+	bookurl := c.Request.PostFormValue("bookurl")
+	log.Printf("%s,%f,%f,%s,%s,%s,%s",bookname,priceori,pricenow,category,content,pic,bookurl)
 
 	if len(bookname) == 0 || len(priceori) == 0 || len(pricenow) == 0 || len(category) == 0 {
 		c.JSON(http.StatusOK, gin.H{

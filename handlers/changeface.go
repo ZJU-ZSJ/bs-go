@@ -3,6 +3,7 @@ package handlers
 import (
 	"bsgo/database"
 	"github.com/gin-gonic/gin"
+	"log"
 	"net/http"
 	"strconv"
 )
@@ -19,7 +20,8 @@ func Changeface(c *gin.Context) {
 		})
 		return
 	}
-	imageUrl := c.PostForm("imageUrl")
+	imageUrl := c.Request.PostFormValue("imageUrl")
+	log.Printf(imageUrl)
 	if len(imageUrl) == 0 {
 		c.JSON(http.StatusOK, gin.H{
 			"code": -1,

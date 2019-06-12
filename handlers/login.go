@@ -9,9 +9,8 @@ import (
 )
 
 func LoginPage(c *gin.Context) {
-
-	username := c.PostForm("username")
-	password := c.PostForm("password")
+	username := c.Request.PostFormValue("username")
+	password := c.Request.PostFormValue("password")
 	log.Println(username, password)
 
 	returncode := 0

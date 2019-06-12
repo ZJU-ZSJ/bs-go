@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="WebServers">
+    <option name="servers">
+      <webServer id="d2153d1e-1ce5-4310-bfd5-32c9052eca61" name="bsweb" url="http://3.113.9.204">
+        <fileTransfer host="3.113.9.204" port="22" privateKey="$USER_HOME$/Downloads/LightsailDefaultKey-ap-northeast-1.pem" accessType="SFTP" keyPair="true">
+          <advancedOptions>
+            <advancedOptions dataProtectionLevel="Private" passiveMode="true" shareSSLContext="true" />
+          </advancedOptions>
+          <option name="port" value="22" />
+        </fileTransfer>
+      </webServer>
+    </option>
+  </component>
+</project>

@@ -10,7 +10,7 @@ import (
 )
 
 func Bcom(c *gin.Context) {
-	orderid := c.PostForm("orderid")
+	orderid := c.Request.PostFormValue("orderid")
 	log.Printf(orderid)
 	i, _ := c.Request.Cookie("uid")
 	toke, _ := c.Request.Cookie("token")
