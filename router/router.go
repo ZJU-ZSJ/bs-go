@@ -36,8 +36,6 @@ func Init() {
 func Cors() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		w := c.Writer
-		r := c.Request
-		// 处理js-ajax跨域问题
 		w.Header().Set("Access-Control-Allow-Credentials", "true")
 		w.Header().Set("Access-Control-Allow-Origin", "*")
 		w.Header().Set("Access-Control-Allow-Methods", "OPTIONS, POST")
