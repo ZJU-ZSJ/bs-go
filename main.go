@@ -5,6 +5,7 @@ import (
 	"bsgo/router"
 	"database/sql"
 	_ "database/sql"
+	"flag"
 	_ "fmt"
 	_ "github.com/mattn/go-sqlite3"
 	"log"
@@ -17,6 +18,9 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
+	baseurl := flag.String("url", "http://localhost", "前端的地址")
+	flag.Parse()
+	log.Printf(*baseurl)
 	/*
 		书状态：
 			0：正常售卖
@@ -75,5 +79,5 @@ func main() {
 		log.Printf("%q: %s\n", err, sql_table)
 		return
 	}
-	router.Init() // init router
+	router.Init(*baseurl) // init router
 }

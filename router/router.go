@@ -5,10 +5,10 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-func Init() {
+func Init(baseurl string) {
 	// Creates a default gin router
 	r := gin.Default() // Grouping routes
-	r.Use(Cors())
+	r.Use(Cors(baseurl))
 	// group： api
 	api := r.Group("/api")
 	{
@@ -33,11 +33,11 @@ func Init() {
 	_ = r.Run(":8000") // listen and serve on 0.0.0.0:8000
 }
 
-func Cors() gin.HandlerFunc {
+func Cors(baseurl string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		w := c.Writer
 		w.Header().Set("Access-Control-Allow-Credentials", "true")
-		w.Header().Set("Access-Control-Allow-Origin", "http://3.113.9.204")
+		w.Header().Set("Access-Control-Allow-Origin", baseurl+":8080")
 		w.Header().Set("Access-Control-Allow-Methods", "OPTIONS, POST")
 		w.Header().Add("Access-Control-Allow-Headers", "Content-Type")
 		w.Header().Add("Access-Control-Allow-Headers", "Access-Token")
