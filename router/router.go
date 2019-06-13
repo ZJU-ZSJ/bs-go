@@ -21,7 +21,7 @@ func Init(baseurl string) {
 		api.GET("/mysell", handlers.MySell)
 		api.POST("/bcom", handlers.Bcom)
 		api.POST("/scom", handlers.Scom)
-		api.GET("/userinfo", handlers.Userinfo)
+		api.GET("/userinfo/:uid", handlers.Userinfo)
 		api.POST("/changeface", handlers.Changeface)
 		api.POST("/changename", handlers.Changename)
 		api.GET("/search", handlers.Search)

@@ -5,21 +5,10 @@ import (
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
-	"strconv"
 )
 
 func Userinfo(c *gin.Context) {
-	id, _ := c.Request.Cookie("uid")
-	toke, _ := c.Request.Cookie("token")
-	uid, _ := strconv.Atoi(id.Value)
-	token := toke.Value
-	if !didlogin(uid, token) {
-		c.JSON(http.StatusOK, gin.H{
-			"code": -10,
-			"msg":  "未登录",
-		})
-		return
-	}
+	uid := c.Param("uid")
 
 	var username string
 	var email string

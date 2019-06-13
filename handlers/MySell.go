@@ -22,7 +22,7 @@ func MySell(c *gin.Context) {
 		return
 	}
 	returncode := 0
-	querystr := "SELECT bookid,orderid,bookname,ordertime,salerid,state,bcom,scom FROM Ord WHERE salerid=" + id.Value
+	querystr := "SELECT bookid,orderid,bookname,ordertime,buyerid,state,bcom,scom FROM Ord WHERE salerid=" + id.Value
 	rows, err := database.DBCon.Query(querystr)
 	if err != nil {
 		returncode = -1
@@ -40,11 +40,11 @@ func MySell(c *gin.Context) {
 		var orderid int
 		var bookname string
 		var ordertime time.Time
-		var salerid int
+		var buyerid int
 		var state int
 		var bcom int
 		var scom int
-		err = rows.Scan(&bookid, &orderid, &bookname, &ordertime, &salerid, &state, &bcom, &scom)
+		err = rows.Scan(&bookid, &orderid, &bookname, &ordertime, &buyerid, &state, &bcom, &scom)
 		if err != nil {
 			log.Printf("%q", err)
 		}
@@ -54,7 +54,7 @@ func MySell(c *gin.Context) {
 			"orderid":   orderid,
 			"bookname":  bookname,
 			"ordertime": ordertime,
-			"salerid":   salerid,
+			"buyerid":   buyerid,
 			"state":     state,
 			"bcom":      bcom,
 			"scom":      scom,
