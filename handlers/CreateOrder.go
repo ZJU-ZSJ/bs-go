@@ -10,8 +10,22 @@ import (
 )
 
 func CreateOrder(c *gin.Context) {
-	i, _ := c.Request.Cookie("uid")
-	toke, _ := c.Request.Cookie("token")
+	i, err := c.Request.Cookie("uid")
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"code": -1,
+			"msg":  "未登录！",
+		})
+		return
+	}
+	toke, err := c.Request.Cookie("token")
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{
+			"code": -1,
+			"msg":  "未登录！",
+		})
+		return
+	}
 	uid, _ := strconv.Atoi(i.Value)
 	token := toke.Value
 	if !didlogin(uid, token) {
@@ -42,7 +56,7 @@ func CreateOrder(c *gin.Context) {
 	}
 	var state int
 	var bookname string
-	err := database.DBCon.QueryRow("SELECT bookname,state,uid FROM Book WHERE bookid=?", bookid).Scan(&bookname, &state, &salerid)
+	err = database.DBCon.QueryRow("SELECT bookname,state,uid FROM Book WHERE bookid=?", bookid).Scan(&bookname, &state, &salerid)
 	if err != nil {
 		log.Printf("%q", err)
 		c.JSON(http.StatusOK, gin.H{
