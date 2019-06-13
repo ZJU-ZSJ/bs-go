@@ -17,11 +17,11 @@ func Search(c *gin.Context) {
 	returncode := 0
 	querystr := ""
 	if searchtype == "0" {
-		querystr = "SELECT bookid,pic,bookname,category,state FROM Book WHERE bookname='" + content + "'"
+		querystr = "SELECT bookid,pic,bookname,category,state,pricenow FROM Book WHERE bookname='" + content + "'"
 	} else if searchtype == "1" {
-		querystr = "SELECT bookid,pic,bookname,category,state FROM Book WHERE bookid=" + content
+		querystr = "SELECT bookid,pic,bookname,category,state,pricenow FROM Book WHERE bookid=" + content
 	} else if searchtype == "2" {
-		querystr = "SELECT bookid,pic,bookname,category,state FROM Book WHERE category='" + content + "'"
+		querystr = "SELECT bookid,pic,bookname,category,state,pricenow FROM Book WHERE category='" + content + "'"
 	} else {
 		c.JSON(http.StatusOK, gin.H{
 			"code": -1,
@@ -48,7 +48,8 @@ func Search(c *gin.Context) {
 		var bookname string
 		var category string
 		var state int
-		err = rows.Scan(&bookid, &pic, &bookname, &category, &state)
+		var pricenow float32
+		err = rows.Scan(&bookid, &pic, &bookname, &category, &state, &pricenow)
 		if err != nil {
 			log.Printf("%q", err)
 		}
@@ -58,6 +59,7 @@ func Search(c *gin.Context) {
 			"bookname": bookname,
 			"category": category,
 			"state":    state,
+			"pricenow": pricenow,
 			"key":      index,
 		})
 		index++
