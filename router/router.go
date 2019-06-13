@@ -37,7 +37,7 @@ func Cors(baseurl string) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		w := c.Writer
 		w.Header().Set("Access-Control-Allow-Credentials", "true")
-		w.Header().Set("Access-Control-Allow-Origin", baseurl+":8080")
+		w.Header().Set("Access-Control-Allow-Origin", baseurl)
 		w.Header().Set("Access-Control-Allow-Methods", "OPTIONS, POST")
 		w.Header().Add("Access-Control-Allow-Headers", "Content-Type")
 		w.Header().Add("Access-Control-Allow-Headers", "Access-Token")
