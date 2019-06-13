@@ -23,6 +23,7 @@ func Init(baseurl string) {
 		api.POST("/scom", handlers.Scom)
 		api.GET("/userinfo", handlers.Userinfo)
 		api.POST("/changeface", handlers.Changeface)
+		api.POST("/changename", handlers.Changename)
 		api.GET("/search", handlers.Search)
 	}
 	book := r.Group("/book")

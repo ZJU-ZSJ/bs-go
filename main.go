@@ -18,7 +18,7 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	baseurl := flag.String("url", "http://localhost", "前端的地址")
+	baseurl := flag.String("url", "http://localhost:8080", "前端的地址")
 	flag.Parse()
 	log.Printf(*baseurl)
 	/*
