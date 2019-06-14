@@ -82,7 +82,7 @@ func Chat(c *gin.Context) {
 				break
 			}
 			chatinto(chatlistid, uid)
-			clients[uid].WriteJSON(chatget(chatlistid, 0, 10))
+			clients[uid].WriteJSON(chatget(chatlistid, 0, 100))
 		} else if msg.Action == "send" {
 			aid, _ := strconv.Atoi(msg.Aneroid)
 			v := chatsend(chatlistid, uid, msg.Msg)
