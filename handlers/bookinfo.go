@@ -14,9 +14,9 @@ func Bookinfo(c *gin.Context) {
 	returncode := 0
 	var querystr string
 	if reserve == "1" {
-		querystr = "SELECT bookid,bookname,pricenow,pic FROM Book order by -bookid LIMIT " + offset + "," + max
+		querystr = "SELECT bookid,bookname,pricenow,pic,content FROM Book order by -bookid LIMIT " + offset + "," + max
 	} else {
-		querystr = "SELECT bookid,bookname,pricenow,pic FROM Book LIMIT " + offset + "," + max
+		querystr = "SELECT bookid,bookname,pricenow,pic,content FROM Book LIMIT " + offset + "," + max
 	}
 
 	rows, err := database.DBCon.Query(querystr)
@@ -35,7 +35,8 @@ func Bookinfo(c *gin.Context) {
 		var bookname string
 		var pricenow float32
 		var pic string
-		err = rows.Scan(&bookid, &bookname, &pricenow, &pic)
+		var content string
+		err = rows.Scan(&bookid, &bookname, &pricenow, &pic, &content)
 		if err != nil {
 			log.Printf("%q", err)
 		}
@@ -44,6 +45,7 @@ func Bookinfo(c *gin.Context) {
 			"bookname": bookname,
 			"pricenow": pricenow,
 			"pic":      pic,
+			"content":  content,
 		})
 	}
 	c.JSON(http.StatusOK, gin.H{
