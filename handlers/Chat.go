@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/http"
 	"strconv"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/gorilla/websocket"
@@ -98,7 +99,16 @@ func Chat(c *gin.Context) {
 			if _, ok := clients[onetoone{aid, uid}]; ok {
 				_ = clients[onetoone{aid, uid}].WriteJSON(v)
 			}
-			v = gin.H{"message": "已发送"}
+			var data = []gin.H{}
+			data = append(data, gin.H{
+				"content": msg.Msg,
+				"time":    time.Now(),
+				"user_id": uid,
+			})
+			v = gin.H{
+				"code": 0,
+				"data": data,
+			}
 			_ = ws.WriteJSON(v)
 
 		}
