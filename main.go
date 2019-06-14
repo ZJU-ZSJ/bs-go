@@ -73,6 +73,27 @@ func main() {
         bcom	INTEGER NOT NULL,
         scom	INTEGER NOT NULL
     );
+    CREATE TABLE IF NOT EXISTS Chat(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_id INTEGER NOT NULL,
+        another_id INTEGER NOT NULL
+    );
+    CREATE TABLE IF NOT EXISTS ChatList(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        chat_id INTEGER NOT NULL,
+        user_id INTEGER NOT NULL,
+        another_id INTEGER NOT NULL,
+        is_online INTEGER NOT NULL,
+        unread INTEGER DEFAULT 0
+    );
+    CREATE TABLE IF NOT EXISTS ChatMsg(
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        chat_id INTEGER NOT NULL,
+        user_id INTEGER NOT NULL,
+        content VARCHAR(64) NOT NULL,
+        time 	TIMESTAMP NOT NULL,
+        is_latest INTEGER DEFAULT 1
+    );
     `
 	_, err = database.DBCon.Exec(sql_table)
 	if err != nil {
