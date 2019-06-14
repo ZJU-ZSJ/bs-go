@@ -37,8 +37,10 @@ func Msgcount(c *gin.Context) {
 		})
 	} else {
 		c.JSON(http.StatusOK, gin.H{
-			"code": returncode,
-			"msg":  "查询失败！",
+			"code": 0,
+			"data": gin.H{
+				"unread": 0,
+			},
 		})
 	}
 }

@@ -16,7 +16,12 @@ var upGrader = websocket.Upgrader{
 	},
 }
 
-var clients = make(map[int]*websocket.Conn)
+type onetoone struct {
+	uid int
+	aid int
+}
+
+var clients = make(map[onetoone]*websocket.Conn)
 
 type data struct {
 	Action  string `json:"action"`
@@ -35,6 +40,7 @@ func Chat(c *gin.Context) {
 	login := false
 	chatlistid := -1
 	uid := -1
+	aid := -1
 	defer ws.Close()
 	for {
 		// 读取ws中的数据
@@ -43,7 +49,7 @@ func Chat(c *gin.Context) {
 			// 客户端关闭连接时也会进入
 			fmt.Println(err)
 			if login {
-				delete(clients, uid)
+				delete(clients, onetoone{uid, aid})
 				chatend(chatlistid, uid)
 			}
 			break
@@ -70,24 +76,27 @@ func Chat(c *gin.Context) {
 			}
 			login = true
 			fmt.Println(msg.Uid, "joined")
-			clients[uid] = ws
 			uid = uid
 		} else if msg.Action == "start" {
-			aid, _ := strconv.Atoi(msg.Aneroid)
+			aid, _ = strconv.Atoi(msg.Aneroid)
 			if err != nil {
+				break
+			}
+			if uid == aid {
 				break
 			}
 			chatlistid = chatinit(uid, aid)
 			if err != nil {
 				break
 			}
+			clients[onetoone{uid, aid}] = ws
 			chatinto(chatlistid, uid)
-			clients[uid].WriteJSON(chatget(chatlistid, 0, 100))
+			clients[onetoone{uid, aid}].WriteJSON(chatget(chatlistid, 0, 100))
 		} else if msg.Action == "send" {
 			aid, _ := strconv.Atoi(msg.Aneroid)
 			v := chatsend(chatlistid, uid, msg.Msg)
-			if _, ok := clients[aid]; ok {
-				_ = clients[aid].WriteJSON(v)
+			if _, ok := clients[onetoone{aid, uid}]; ok {
+				_ = clients[onetoone{aid, uid}].WriteJSON(v)
 			}
 			v = gin.H{"message": "已发送"}
 			_ = ws.WriteJSON(v)

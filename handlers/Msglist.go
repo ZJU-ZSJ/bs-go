@@ -6,7 +6,6 @@ import (
 	"log"
 	"net/http"
 	"strconv"
-	"time"
 )
 
 func Msglist(c *gin.Context) {
@@ -22,7 +21,7 @@ func Msglist(c *gin.Context) {
 		return
 	}
 	returncode := 0
-	querystr := "SELECT  FROM ChatList WHERE buyerid=" + id.Value
+	querystr := "SELECT another_id,unread FROM ChatList WHERE user_id=" + id.Value + " order by unread desc"
 	rows, err := database.DBCon.Query(querystr)
 	if err != nil {
 		returncode = -1
@@ -36,28 +35,15 @@ func Msglist(c *gin.Context) {
 	var data = []gin.H{}
 	var index = 0
 	for rows.Next() {
-		var bookid int
-		var orderid int
-		var bookname string
-		var ordertime time.Time
-		var salerid int
-		var state int
-		var bcom int
-		var scom int
-		err = rows.Scan(&bookid, &orderid, &bookname, &ordertime, &salerid, &state, &bcom, &scom)
+		var another_id int
+		var unread int
+		err = rows.Scan(&another_id, &unread)
 		if err != nil {
 			log.Printf("%q", err)
 		}
 		data = append(data, gin.H{
-			"bookid":    bookid,
-			"key":       index,
-			"orderid":   orderid,
-			"bookname":  bookname,
-			"ordertime": ordertime,
-			"salerid":   salerid,
-			"state":     state,
-			"bcom":      bcom,
-			"scom":      scom,
+			"another_id": another_id,
+			"unread":     unread,
 		})
 		index++
 	}
