@@ -34,6 +34,10 @@ func main() {
 		订单分类：
 			0:邮寄
 			1:线下交易
+
+		求购分类:
+			0:正常求购
+			1:求购完成
 	*/
 	//创建表
 	sql_table := `
@@ -59,6 +63,16 @@ func main() {
         uid		INTEGER NOT NULL,
         state	INTEGER NOT NULL,
         time	TIME 	NOT NULL
+    );
+	CREATE TABLE IF NOT EXISTS BookWanted(
+        wantedid INTEGER PRIMARY KEY AUTOINCREMENT,
+        bookname VARCHAR(64) NOT NULL,
+        pricewanted FLOAT 		NOT NULL,
+        moreinfo	 VARCHAR(64) NULL,
+        uid		INTEGER NOT NULL,
+        state	INTEGER NOT NULL,
+        time	TIMESTAMP 	NOT NULL,
+        orderid INTEGER NULL
     );
     CREATE TABLE IF NOT EXISTS Ord(
         orderid INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -91,8 +105,7 @@ func main() {
         chat_id INTEGER NOT NULL,
         user_id INTEGER NOT NULL,
         content VARCHAR(64) NOT NULL,
-        time 	TIMESTAMP NOT NULL,
-        is_latest INTEGER DEFAULT 1
+        time 	TIMESTAMP NOT NULL
     );
     `
 	_, err = database.DBCon.Exec(sql_table)

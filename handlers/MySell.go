@@ -22,7 +22,7 @@ func MySell(c *gin.Context) {
 		return
 	}
 	returncode := 0
-	querystr := "SELECT bookid,orderid,bookname,ordertime,buyerid,state,bcom,scom FROM Ord WHERE salerid=" + id.Value
+	querystr := "SELECT username,name,bookid,orderid,bookname,ordertime,buyerid,state,bcom,scom FROM Ord inner join User on Ord.buyerid = User.uid WHERE salerid=" + id.Value
 	rows, err := database.DBCon.Query(querystr)
 	if err != nil {
 		returncode = -1
@@ -36,6 +36,8 @@ func MySell(c *gin.Context) {
 	var data = []gin.H{}
 	var index = 0
 	for rows.Next() {
+		var username string
+		var name string
 		var bookid int
 		var orderid int
 		var bookname string
@@ -44,11 +46,13 @@ func MySell(c *gin.Context) {
 		var state int
 		var bcom int
 		var scom int
-		err = rows.Scan(&bookid, &orderid, &bookname, &ordertime, &buyerid, &state, &bcom, &scom)
+		err = rows.Scan(&username, &name, &bookid, &orderid, &bookname, &ordertime, &buyerid, &state, &bcom, &scom)
 		if err != nil {
 			log.Printf("%q", err)
 		}
 		data = append(data, gin.H{
+			"username":  username,
+			"name":      name,
 			"bookid":    bookid,
 			"key":       index,
 			"orderid":   orderid,

@@ -23,7 +23,7 @@ func Msgcount(c *gin.Context) {
 	}
 	returncode := 0
 	var unread int
-	err := database.DBCon.QueryRow("SELECT SUM(unread) FROM ChatList WHERE user_id=?", uid).Scan(&unread)
+	err := database.DBCon.QueryRow("SELECT IFNULL(SUM(unread),0) FROM ChatList WHERE user_id=?", uid).Scan(&unread)
 	if err != nil {
 		returncode = -1
 		log.Printf("%q", err)

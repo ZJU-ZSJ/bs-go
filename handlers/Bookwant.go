@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"bsgo/database"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"log"
 	"net/http"
@@ -9,7 +10,7 @@ import (
 	"time"
 )
 
-func BookAdd(c *gin.Context) {
+func BookWant(c *gin.Context) {
 	i, _ := c.Request.Cookie("uid")
 	toke, _ := c.Request.Cookie("token")
 	uid, _ := strconv.Atoi(i.Value)
@@ -22,15 +23,11 @@ func BookAdd(c *gin.Context) {
 		return
 	}
 	bookname := c.Request.PostFormValue("bookname")
-	priceori, _ := strconv.ParseFloat(c.Request.PostFormValue("priceori"), 64)
-	pricenow, _ := strconv.ParseFloat(c.Request.PostFormValue("pricenow"), 64)
-	category := c.Request.PostFormValue("category")
-	content := c.Request.PostFormValue("content")
-	pic := c.Request.PostFormValue("pic")
-	bookurl := c.Request.PostFormValue("bookurl")
-	log.Printf("%s,%f,%f,%s,%s,%s,%s", bookname, priceori, pricenow, category, content, pic, bookurl)
+	pricewanted, _ := strconv.ParseFloat(c.Request.PostFormValue("pricewanted"), 64)
+	moreinfo := c.Request.PostFormValue("moreinfo")
+	log.Printf("%s,%f,%s", bookname, pricewanted, moreinfo)
 
-	if len(bookname) == 0 || len(category) == 0 {
+	if len(bookname) == 0 || len(moreinfo) >= 500 {
 		c.JSON(http.StatusOK, gin.H{
 			"code": -1,
 			"msg":  "格式错误",
@@ -40,17 +37,18 @@ func BookAdd(c *gin.Context) {
 	returncode := 0
 	var id = int64(0)
 
-	stmt, err := database.DBCon.Prepare("INSERT INTO Book(bookname, priceori,pricenow,category,content,pic,bookurl,uid,state,time) values(?,?,?,?,?,?,?,?,?,?)")
+	stmt, err := database.DBCon.Prepare("INSERT INTO BookWanted(bookname, pricewanted,moreinfo,uid,state,time) values(?,?,?,?,?,?)")
 	if err != nil {
 		returncode = -1
 		log.Printf("%q", err)
 	}
 	if returncode == 0 {
-		res, err := stmt.Exec(bookname, priceori, pricenow, category, content, pic, bookurl, uid, 0, time.Now())
+		res, err := stmt.Exec(bookname, pricewanted, moreinfo, uid, 0, time.Now())
 		if err != nil {
+			fmt.Println(err)
 			c.JSON(http.StatusOK, gin.H{
 				"code": returncode,
-				"msg":  "图书添加失败",
+				"msg":  "求购添加失败",
 			})
 			return
 		}
@@ -60,14 +58,14 @@ func BookAdd(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"code": returncode,
 			"data": gin.H{
-				"msg": "图书添加成功",
+				"msg": "求购添加成功",
 				"id":  id,
 			},
 		})
 	} else {
 		c.JSON(http.StatusOK, gin.H{
 			"code": returncode,
-			"msg":  "图书添加失败",
+			"msg":  "求购添加失败",
 		})
 	}
 }

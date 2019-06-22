@@ -28,9 +28,13 @@ func Init(baseurl string) {
 		api.GET("/chat", handlers.Chat)
 		api.GET("/msgcount", handlers.Msgcount)
 		api.GET("/msglist", handlers.Msglist)
+		api.GET("/mywanted", handlers.MyWanted)
+		api.GET("/wantlist", handlers.Wantedlist)
+		api.POST("/handlewant", handlers.Handlewant)
 	}
 	book := r.Group("/book")
 	{
+		book.POST("/want", handlers.BookWant)
 		book.POST("/add", handlers.BookAdd)
 		book.GET("/show/:id", handlers.Bookshow)
 	}

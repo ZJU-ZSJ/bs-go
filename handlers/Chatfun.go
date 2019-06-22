@@ -144,17 +144,7 @@ func chatsend(chatlistid int, uid int, content string) gin.H {
 			return gin.H{"code": -1}
 		}
 	}
-	stmt, err := database.DBCon.Prepare("UPDATE ChatMsg set is_latest=0 WHERE id IN (SELECT id FROM ChatMsg WHERE is_latest=1 and user_id=? and chat_id=? ORDER BY id DESC LIMIT 1)")
-	if err != nil {
-		fmt.Println(err)
-		return gin.H{"code": -1}
-	}
-	_, err = stmt.Exec(uid, chatlistid)
-	if err != nil {
-		fmt.Println(err)
-		return gin.H{"code": -1}
-	}
-	stmt, err = database.DBCon.Prepare("INSERT INTO ChatMsg(chat_id,user_id,content,time) values(?,?,?,?)")
+	stmt, err := database.DBCon.Prepare("INSERT INTO ChatMsg(chat_id,user_id,content,time) values(?,?,?,?)")
 	if err != nil {
 		fmt.Println(err)
 		return gin.H{"code": -1}

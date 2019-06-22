@@ -9,7 +9,7 @@ import (
 	"time"
 )
 
-func MyOrder(c *gin.Context) {
+func MyWanted(c *gin.Context) {
 	id, _ := c.Request.Cookie("uid")
 	toke, _ := c.Request.Cookie("token")
 	uid, _ := strconv.Atoi(id.Value)
@@ -22,7 +22,7 @@ func MyOrder(c *gin.Context) {
 		return
 	}
 	returncode := 0
-	querystr := "SELECT username,name,bookid,orderid,bookname,ordertime,salerid,state,bcom,scom FROM Ord inner join User on Ord.salerid = User.uid WHERE buyerid=" + id.Value
+	querystr := "SELECT wantedid,bookname,pricewanted,moreinfo,state,time,IFNULL(orderid,0) FROM BookWanted WHERE uid=" + id.Value
 	rows, err := database.DBCon.Query(querystr)
 	if err != nil {
 		returncode = -1
@@ -36,32 +36,26 @@ func MyOrder(c *gin.Context) {
 	var data = []gin.H{}
 	var index = 0
 	for rows.Next() {
-		var username string
-		var name string
-		var bookid int
-		var orderid int
+		var wantedid int
 		var bookname string
-		var ordertime time.Time
-		var salerid int
+		var pricewanted float64
+		var moreinfo string
+		var addtime time.Time
 		var state int
-		var bcom int
-		var scom int
-		err = rows.Scan(&username, &name, &bookid, &orderid, &bookname, &ordertime, &salerid, &state, &bcom, &scom)
+		var orderid int
+		err = rows.Scan(&wantedid, &bookname, &pricewanted, &moreinfo, &state, &addtime, &orderid)
 		if err != nil {
 			log.Printf("%q", err)
 		}
 		data = append(data, gin.H{
-			"username":  username,
-			"name":      name,
-			"bookid":    bookid,
-			"key":       index,
-			"orderid":   orderid,
-			"bookname":  bookname,
-			"ordertime": ordertime,
-			"salerid":   salerid,
-			"state":     state,
-			"bcom":      bcom,
-			"scom":      scom,
+			"wantedid":    wantedid,
+			"key":         index,
+			"bookname":    bookname,
+			"pricewanted": pricewanted,
+			"moreinfo":    moreinfo,
+			"state":       state,
+			"time":        addtime,
+			"orderid":     orderid,
 		})
 		index++
 	}
