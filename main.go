@@ -62,7 +62,7 @@ func main() {
         bookurl	VARCHAR		NULL,
         uid		INTEGER NOT NULL,
         state	INTEGER NOT NULL,
-        time	TIME 	NOT NULL
+        time	TIMESTAMP 	NOT NULL
     );
 	CREATE TABLE IF NOT EXISTS BookWanted(
         wantedid INTEGER PRIMARY KEY AUTOINCREMENT,

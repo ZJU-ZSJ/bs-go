@@ -21,7 +21,7 @@ func Msglist(c *gin.Context) {
 		return
 	}
 	returncode := 0
-	querystr := "SELECT another_id,unread FROM ChatList WHERE user_id=" + id.Value + " order by unread desc"
+	querystr := "SELECT face,username,name,another_id,unread FROM ChatList inner join User on ChatList.another_id = User.uid WHERE user_id=" + id.Value + " order by unread desc"
 	rows, err := database.DBCon.Query(querystr)
 	if err != nil {
 		returncode = -1
@@ -35,13 +35,19 @@ func Msglist(c *gin.Context) {
 	var data = []gin.H{}
 	var index = 0
 	for rows.Next() {
+		var face string
 		var another_id int
 		var unread int
-		err = rows.Scan(&another_id, &unread)
+		var username string
+		var name string
+		err = rows.Scan(&face, &username, &name, &another_id, &unread)
 		if err != nil {
 			log.Printf("%q", err)
 		}
 		data = append(data, gin.H{
+			"face":       face,
+			"username":   username,
+			"name":       name,
 			"another_id": another_id,
 			"unread":     unread,
 		})
